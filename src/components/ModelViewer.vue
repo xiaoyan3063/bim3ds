@@ -26,6 +26,11 @@
             <i :class="metric.trendIcon"></i> {{ metric.trendValue }}
           </div>
         </div>
+        <!-- 环形图 -->
+        <div class="ring-chart">
+          <h3>设备状态分布</h3>
+          <div ref="ringChart1" class="chart-container"></div>
+        </div>
       </div>
       
       <!-- 右侧指标面板 - 浮动在模型上方 -->
@@ -46,7 +51,7 @@
         <!-- 环形图 -->
         <div class="ring-chart">
           <h3>设备状态分布</h3>
-          <div ref="ringChart" class="chart-container"></div>
+          <div ref="ringChart2" class="chart-container"></div>
         </div>
       </div>
       
@@ -267,7 +272,8 @@ export default {
           color: '#67C23A'
         }
       ],
-      ringChart: null
+      ringChart1: null,
+      ringChart2: null
     }
   },
   
@@ -292,8 +298,11 @@ export default {
   
   beforeDestroy() {
     this.cleanup()
-    if (this.ringChart) {
-      this.ringChart.dispose()
+    if (this.ringChart1) {
+      this.ringChart1.dispose()
+    }
+    if (this.ringChart2) {
+      this.ringChart2.dispose()
     }
   },
   
@@ -307,7 +316,8 @@ export default {
     
     initRingChart() {
       this.$nextTick(() => {
-        this.ringChart = echarts.init(this.$refs.ringChart)
+        this.ringChart1 = echarts.init(this.$refs.ringChart1)
+        this.ringChart2 = echarts.init(this.$refs.ringChart2)
         const option = {
           tooltip: {
             trigger: 'item'
@@ -355,7 +365,8 @@ export default {
             }
           ]
         }
-        this.ringChart.setOption(option)
+        this.ringChart1.setOption(option)
+        this.ringChart2.setOption(option)
         
         // 响应式调整
         window.addEventListener('resize', this.resizeRingChart)
@@ -363,8 +374,11 @@ export default {
     },
     
     resizeRingChart() {
-      if (this.ringChart) {
-        this.ringChart.resize()
+      if (this.ringChart1) {
+        this.ringChart1.resize()
+      }
+      if (this.ringChart2) {
+        this.ringChart2.resize()
       }
     },
     
