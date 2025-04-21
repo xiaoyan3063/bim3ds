@@ -1,8 +1,5 @@
 <template>
   <div id="app">
-    <!-- <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/> -->
-    <!-- <h1>三维监控系统</h1> -->
      <div>
         <model-viewer
           :model-url="modelUrl"
@@ -10,7 +7,6 @@
           :logic-relations="logicRelations"
         />
      </div>
-     <editor2d />
   </div>
 </template>
 
