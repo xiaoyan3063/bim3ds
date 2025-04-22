@@ -3,7 +3,7 @@
     <!-- 大标题 -->
     <div class="dashboard-header">
       <div class="title-bg">
-        <h1>智慧机房监控平台</h1>
+        <h1>机房3D可视化演示demo</h1>
       </div>
       <div class="header-decoration"></div>
     </div>
@@ -11,6 +11,22 @@
     <!-- 主内容区域 - 模型占据全部空间 -->
     <div class="model-container">
       <div ref="container" class="renderer-container"></div>
+
+      <!-- 中间顶部指标面板 - 浮动在模型上方 -->
+      <div class="center-top-panel floating-panel">
+        <div class="metric-card" v-for="(metric, index) in centerMetrics" :key="'center-'+index">
+          <!-- <div class="metric-icon" :style="{ backgroundColor: metric.color }">
+            <i :class="metric.icon"></i>
+          </div> -->
+          <div class="metric-info">
+            <div class="metric-value">{{ metric.value }}</div>
+            <div class="metric-title">{{ metric.title }}</div>
+          </div>
+          <!-- <div class="metric-trend" :class="metric.trend">
+            <i :class="metric.trendIcon"></i> {{ metric.trendValue }}
+          </div> -->
+        </div>
+      </div>
       
       <!-- 左侧指标面板 - 浮动在模型上方 -->
       <div class="left-panel floating-panel">
@@ -119,18 +135,26 @@ const MODEL_LEVELS = {
     zoom: 1.2,
     nextLevel: 2
   },
+  // 2: { 
+  //   file: '/assets/models/level2.glb', 
+  //   clickPrefix: 'yfdl00333',
+  //   cameraPosition: { x: 0, y: 20, z: 40 },
+  //   targetPosition: { x: 0, y: 0, z: 0 },
+  //   zoom: 1.0,
+  //   nextLevel: 3
+  // },
   2: { 
-    file: '/assets/models/level2.glb', 
-    clickPrefix: 'yfdl00333',
-    cameraPosition: { x: 0, y: 20, z: 40 },
+    file: '/assets/models/level2-1.glb', 
+    clickPrefix: '基本墙_常规_-_200mm_738',
+    cameraPosition: { x: 15, y: 20, z: 30 },
     targetPosition: { x: 0, y: 0, z: 0 },
-    zoom: 1.0,
+    zoom: 0.5,
     nextLevel: 3
   },
   3: { 
     file: '/assets/models/level3.glb', 
     clickPrefix: '1-1jianzhu',
-    cameraPosition: { x: 0, y: 35, z: 25 },
+    cameraPosition: { x: 10, y: 35, z: 25 },
     targetPosition: { x: 0, y: 0, z: 0 },
     zoom: 1.0,
     nextLevel: 4
@@ -138,7 +162,7 @@ const MODEL_LEVELS = {
   4: { 
     file: '/assets/models/level4.glb', 
     clickPrefix: 'jigui',
-    cameraPosition: { x: 0, y: 40, z: 25 },  // 调整位置
+    cameraPosition: { x: 5, y: 40, z: 25 },  // 调整位置
     targetPosition: { x: 0, y: 0, z: 0 },
     zoom: 0.8,  // 减小缩放值
     nextLevel: 5
@@ -146,7 +170,7 @@ const MODEL_LEVELS = {
   5: { 
     file: '/assets/models/level5.glb', 
     clickPrefix: null,
-    cameraPosition: { x: 0, y: 8, z: 15 },  // 调整位置
+    cameraPosition: { x: 10, y: 8, z: 15 },  // 调整位置
     targetPosition: { x: 0, y: 0, z: 0 },
     zoom: 0.5,  // 进一步减小缩放值
     nextLevel: null
@@ -215,15 +239,15 @@ export default {
           trendIcon: 'el-icon-top',
           color: '#67C23A'
         },
-        // {
-        //   icon: 'el-icon-user',
-        //   title: '今日访客数',
-        //   value: '1,245',
-        //   trend: 'down',
-        //   trendValue: '-3.2%',
-        //   trendIcon: 'el-icon-bottom',
-        //   color: '#E6A23C'
-        // },
+        {
+          icon: 'el-icon-user',
+          title: '今日访客数',
+          value: '1,245',
+          trend: 'down',
+          trendValue: '-3.2%',
+          trendIcon: 'el-icon-bottom',
+          color: '#E6A23C'
+        },
         {
           icon: 'el-icon-data-line',
           title: '能耗总量(kWh)',
@@ -253,15 +277,15 @@ export default {
           trendIcon: 'el-icon-top',
           color: '#E6A23C'
         },
-        // {
-        //   icon: 'el-icon-thermometer',
-        //   title: '平均温度(℃)',
-        //   value: '26.5',
-        //   trend: 'steady',
-        //   trendValue: '0.0',
-        //   trendIcon: 'el-icon-right',
-        //   color: '#909399'
-        // },
+        {
+          icon: 'el-icon-thermometer',
+          title: '平均温度(℃)',
+          value: '26.5',
+          trend: 'steady',
+          trendValue: '0.0',
+          trendIcon: 'el-icon-right',
+          color: '#909399'
+        },
         {
           icon: 'el-icon-cloudy',
           title: '空气质量(AQI)',
@@ -273,7 +297,54 @@ export default {
         }
       ],
       ringChart1: null,
-      ringChart2: null
+      ringChart2: null,
+      centerMetrics: [
+        {
+          icon: 'el-icon-data-board',
+          title: 'CPU使用率',
+          value: '78%',
+          trend: 'up',
+          trendValue: '+5%',
+          trendIcon: 'el-icon-top',
+          color: '#409EFF'
+        },
+        {
+          icon: 'el-icon-memory',
+          title: '内存使用率',
+          value: '64%',
+          trend: 'steady',
+          trendValue: '0%',
+          trendIcon: 'el-icon-right',
+          color: '#67C23A'
+        },
+        {
+          icon: 'el-icon-connection',
+          title: '网络负载',
+          value: '42%',
+          trend: 'down',
+          trendValue: '-8%',
+          trendIcon: 'el-icon-bottom',
+          color: '#E6A23C'
+        },
+        {
+          icon: 'el-icon-refrigerator',
+          title: '温度(℃)',
+          value: '26.5',
+          trend: 'up',
+          trendValue: '+1.2',
+          trendIcon: 'el-icon-top',
+          color: '#F56C6C'
+        },
+        {
+          icon: 'el-icon-lightning',
+          title: '电力负载',
+          value: '85%',
+          trend: 'up',
+          trendValue: '+3%',
+          trendIcon: 'el-icon-top',
+          color: '#909399'
+        }
+      ],
     }
   },
   
@@ -456,6 +527,7 @@ export default {
         const loader = new GLTFLoader();
         const gltf = await loader.loadAsync(modelPath);
         const model = gltf.scene;
+        console.log("model",model);
         
         // 2. 重置模型变换
         model.rotation.set(0, 0, 0);
@@ -1366,6 +1438,72 @@ export default {
   border-color: #64f0ff;
 }
 
+/* 新增中间顶部面板样式 */
+.center-top-panel {
+  position: absolute;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: auto;
+  display: flex;
+  flex-direction: row;
+  gap: 15px;
+  padding: 15px;
+  background: rgba(16, 42, 66, 0.5);
+  border-radius: 8px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(100, 200, 255, 0.2);
+  z-index: 10;
+}
+/* 调整指标卡片在水平布局中的样式 */
+.center-top-panel .metric-card {
+  flex-direction: column;
+  align-items: flex-start;
+  min-width: 120px;
+  padding: 12px;
+}
+
+.center-top-panel .metric-icon {
+  margin-right: 0;
+  margin-bottom: 10px;
+}
+
+.center-top-panel .metric-info {
+  width: 100%;
+}
+
+.center-top-panel .metric-value {
+  font-size: 20px;
+  margin-bottom: 3px;
+}
+
+.center-top-panel .metric-title {
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.center-top-panel .metric-trend {
+  margin-top: 5px;
+  align-self: flex-end;
+}
+
+/* 响应式调整 */
+/* @media (max-width: 1600px) {
+  .center-top-panel {
+    flex-wrap: wrap;
+    width: 80%;
+    justify-content: center;
+  }
+  
+  .center-top-panel .metric-card {
+    min-width: 100px;
+    padding: 10px;
+  }
+  
+  .center-top-panel .metric-value {
+    font-size: 18px;
+  }
+} */
 @keyframes pulse {
   0% { opacity: 1; }
   50% { opacity: 0.6; }
