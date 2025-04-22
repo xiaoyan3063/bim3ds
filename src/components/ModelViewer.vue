@@ -144,7 +144,7 @@ const MODEL_LEVELS = {
   //   nextLevel: 3
   // },
   2: { 
-    file: '/assets/models/level2-1.glb', 
+    file: '/assets/models/level2.glb', 
     clickPrefix: '基本墙_常规_-_200mm_738',
     cameraPosition: { x: 15, y: 20, z: 30 },
     targetPosition: { x: 0, y: 0, z: 0 },
@@ -844,7 +844,7 @@ export default {
     setupHoverEvents() {
       const dom = this.renderer.domElement;
       // 防抖函数（100ms触发一次）
-      this.debouncedHandleHover = _.debounce(this.handleHover, 100, {
+      this.debouncedHandleHover = debounce(this.handleHover, 100, {
         leading: true,  // 首次触发立即执行
         trailing: true  // 结束后再触发一次
       });
